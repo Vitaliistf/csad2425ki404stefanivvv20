@@ -83,11 +83,5 @@ jobs:
 
       - name: Run Vitest tests
         run: |
-          npm run test -- --ci --reporter=vitest-reporter-junit
+          npm run test
         working-directory: ./client
-
-      - name: Upload React test reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: react-test-reports
-          path: ./client/test-reports/*
