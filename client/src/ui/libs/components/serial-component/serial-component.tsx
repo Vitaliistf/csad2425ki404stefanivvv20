@@ -51,4 +51,4 @@ const SerialComponent: React.FC = () => {
   );
 };
 
-export default SerialComponent;
+export { SerialComponent };

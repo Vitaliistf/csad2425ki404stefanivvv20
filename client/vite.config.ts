@@ -1,5 +1,5 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,8 +8,13 @@ export default defineConfig({
   build: {
     outDir: "dist-react",
   },
-  server : {
+  server: {
     port: 5123,
-    strictPort: true
-  }
-})
+    strictPort: true,
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./test/setup.ts",
+  },
+});
