@@ -1,0 +1,87 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build-arduino:
+    name: Build Arduino Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Arduino CLI
+        uses: arduino/setup-arduino-cli@v1
+        with:
+          version: "0.29.0"
+
+      - name: Install dependencies for Arduino
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr # Update if you're using a different board
+
+      - name: Compile Arduino Project
+        run: |
+          arduino-cli compile --fqbn arduino:avr:uno ./server.ino
+        working-directory: ./server
+
+      - name: Upload compiled Arduino binary to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: arduino-binaries
+          path: ./server/build/*
+
+  build-react:
+    name: Build React Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
+      - name: Install dependencies for React
+        run: |
+          cd ./client
+          npm install
+
+      - name: Build React project
+        run: |
+          npm run build
+        working-directory: ./client
+
+      - name: Upload React build to artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-build
+          path: ./client/dist-react
+
+  test-react:
+    name: Run React Tests
+    runs-on: ubuntu-latest
+    needs: build-react
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies for React
+        run: |
+          cd ./client
+          npm install
+
+      - name: Run Vitest tests
+        run: |
+          npm run test
+        working-directory: ./client
