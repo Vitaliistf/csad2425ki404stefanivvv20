@@ -1,0 +1,72 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto !important;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modeSelect {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.players {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.player {
+  text-align: center;
+  background: #f9fafb;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+}
+
+.score {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: #1f2937;
+}
+
+.moves {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.gameActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.computerControls {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.player {
+  animation: fadeIn 0.3s ease-out;
+}

@@ -4,4 +4,7 @@ export {
   SerialContext,
 } from "./serial-context-provider/serial-context-provider";
 
-export { SerialComponent } from "./serial-component/serial-component";
+export { RockPaperScissors } from "./rock-paper-scissors/rock-paper-scissors";
+export { Button } from "./button/button";
+export { Select } from "./select/select";
+export { Card, CardHeader, CardTitle, CardContent } from "./card/card";
