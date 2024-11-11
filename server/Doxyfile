@@ -1,0 +1,36 @@
+# Project details
+PROJECT_NAME           = "Rock Paper Scissors Server"
+OUTPUT_DIRECTORY       = ./docs
+INPUT                 = server.ino
+FILE_PATTERNS         = *.ino
+EXTENSION_MAPPING     = ino=C++
+OPTIMIZE_OUTPUT_FOR_C  = YES
+
+# Extract everything
+EXTRACT_ALL           = YES
+EXTRACT_PRIVATE       = YES
+EXTRACT_STATIC        = YES
+
+# Graphics settings
+HAVE_DOT             = YES
+CLASS_DIAGRAMS       = YES
+CLASS_GRAPH          = YES
+
+# Output settings
+GENERATE_HTML        = YES
+GENERATE_LATEX       = NO
+
+# Source code settings
+SOURCE_BROWSER       = YES
+INLINE_SOURCES       = YES
+
+# Arduino specific settings
+BUILTIN_STL_SUPPORT  = YES
+TYPEDEF_HIDES_STRUCT = YES
+
+# Documentation settings
+JAVADOC_AUTOBRIEF    = YES
+QT_AUTOBRIEF         = YES
+MULTILINE_CPP_IS_BRIEF = YES
+INHERIT_DOCS         = YES
+DISTRIBUTE_GROUP_DOC = YES

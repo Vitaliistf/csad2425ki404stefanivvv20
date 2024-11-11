@@ -11,6 +11,10 @@ import {
 import { GameMode, Move, SerialMessage, GameState } from "../../types/types";
 import styles from "./styles.module.css";
 
+/**
+ * @constant INITIAL_STATE
+ * Initial game state object containing player scores, mode, and moves.
+ */
 const INITIAL_STATE: GameState = {
   player1Score: 0,
   player2Score: 0,
@@ -19,6 +23,10 @@ const INITIAL_STATE: GameState = {
   lastMove2: "",
 };
 
+/**
+ * @constant MODE_OPTIONS
+ * List of available game modes for the dropdown selector.
+ */
 const MODE_OPTIONS = [
   { value: "hvh" as GameMode, label: "Human vs Human" },
   { value: "hvc" as GameMode, label: "Human vs Computer" },
@@ -26,8 +34,18 @@ const MODE_OPTIONS = [
   { value: "cvcs" as GameMode, label: "Computer vs Computer (smart)" },
 ];
 
+/**
+ * @constant MOVES
+ * Possible moves.
+ */
 const MOVES: Move[] = ["rock", "paper", "scissors"];
 
+/**
+ * @component RockPaperScissors
+ * Main component for the Rock-Paper-Scissors game with options to play
+ * in different modes, save/load game states, and control Arduino communication.
+ * @returns {React.FC} The RockPaperScissors game component.
+ */
 const RockPaperScissors: React.FC = () => {
   const { connect, disconnect, sendMessage, receivedMessage, isConnected } =
     useSerialCommunication();
