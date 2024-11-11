@@ -22,6 +22,7 @@ const SerialContextProvider: React.FC<{ children: React.ReactNode }> = ({
     null
   );
   const [receivedMessage, setReceivedMessage] = useState<string | null>(null);
+  const [, setMessageBuffer] = useState<string>("");
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   const connect = async () => {
@@ -79,7 +80,18 @@ const SerialContextProvider: React.FC<{ children: React.ReactNode }> = ({
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        if (value) setReceivedMessage(value);
+        if (value) {
+          setMessageBuffer((prev) => {
+            const newBuffer = prev + value;
+            const endIdx = newBuffer.indexOf("\n");
+            if (endIdx !== -1) {
+              const fullMessage = newBuffer.slice(0, endIdx);
+              setReceivedMessage(fullMessage);
+              return newBuffer.slice(endIdx + 1);
+            }
+            return newBuffer;
+          });
+        }
       }
     };
 
