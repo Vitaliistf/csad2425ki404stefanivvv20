@@ -1,7 +1,12 @@
 import { useState, useCallback } from "react";
 import { GameState } from "../types/types";
 
-// Паттерн Observer реалізований через хук
+/**
+ * @function useGameState
+ * Custom hook for managing game state with an Observer pattern.
+ * @param {GameState} initialState - Initial game state values.
+ * @returns {Object} - An object containing the current state and an update function.
+ */
 export const useGameState = (initialState: GameState) => {
   const [state, setState] = useState<GameState>(initialState);
 

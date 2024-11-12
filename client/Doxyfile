@@ -1,0 +1,50 @@
+# Project settings
+   PROJECT_NAME           = "Rock Paper Scissors Client"
+   OUTPUT_DIRECTORY       = docs
+   
+   # Input settings
+   INPUT                 = ./src
+   FILE_PATTERNS         = *.ts *.tsx
+   RECURSIVE             = YES
+   
+   # TypeScript specific settings
+   EXTENSION_MAPPING     = ts=JavaScript tsx=JavaScript
+   OPTIMIZE_OUTPUT_JAVA  = YES
+   JAVADOC_AUTOBRIEF    = YES
+   
+   # Enable all supported cross-reference formats
+   REFERENCED_BY_RELATION = YES
+   REFERENCES_RELATION    = YES
+   
+   # Enable preprocessing
+   ENABLE_PREPROCESSING   = YES
+   MACRO_EXPANSION       = YES
+   EXPAND_ONLY_PREDEF    = NO
+   
+   # Handle TypeScript/JavaScript constructs
+   EXTRACT_ALL            = YES
+   EXTRACT_PRIVATE       = YES
+   EXTRACT_STATIC        = YES
+   EXTRACT_LOCAL_CLASSES = YES
+   
+   # Source browsing
+   SOURCE_BROWSER        = YES
+   INLINE_SOURCES       = YES
+   
+   # Output settings
+   GENERATE_HTML         = YES
+   GENERATE_LATEX        = NO
+   
+   # Include all documentation
+   FULL_PATH_NAMES      = YES
+   STRIP_FROM_PATH      = ./src
+   
+   # Handle modern JavaScript
+   OPTIMIZE_FOR_TYPESCRIPT = YES
+   MARKDOWN_SUPPORT       = YES
+   
+   # Diagrams and graphs
+   HAVE_DOT              = YES
+   CLASS_DIAGRAMS        = YES
+   CLASS_GRAPH           = YES
+   COLLABORATION_GRAPH   = YES

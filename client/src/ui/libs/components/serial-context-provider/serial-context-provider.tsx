@@ -1,6 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
 import { SerialPort } from "serialport";
 
+/**
+ * @interface SerialContextType
+ * Interface defining the context API for serial communication.
+ * @property connect - Function to establish a serial connection.
+ * @property disconnect - Function to close the serial connection.
+ * @property sendMessage - Function to send messages to the serial device.
+ * @property receivedMessage - The latest received message.
+ * @property isConnected - Connection status.
+ */
 interface SerialContextType {
   connect: () => Promise<void>;
   disconnect: () => void;
@@ -9,8 +18,17 @@ interface SerialContextType {
   isConnected: boolean;
 }
 
+/**
+ * @context SerialContext
+ * React Context for serial communication, providing connection and messaging methods.
+ */
 const SerialContext = createContext<SerialContextType | undefined>(undefined);
 
+/**
+ * @component SerialContextProvider
+ * Provides serial communication context to its children components.
+ * @param {React.FC<{ children: React.ReactNode }>} props - Props containing children.
+ */
 const SerialContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {

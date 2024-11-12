@@ -1,6 +1,27 @@
+/**
+ * @file server.ino
+ * @description Implements a Rock-Paper-Scissors game on Arduino, including game state management, strategies, and serial communication.
+ * This program utilizes the State, Strategy, and Singleton design patterns to manage various aspects of the game.
+ * It interacts with the user via serial commands, allowing game mode selection, score tracking, saving/loading game state, and move processing.
+ * 
+ * Dependencies:
+ *  - ArduinoJson library for JSON parsing and serialization
+ * 
+ * Main Components:
+ *  - GameState: Stores and manages the game's state (e.g., scores, game mode, last moves).
+ *  - GameStrategy (and its derived classes): Defines strategies for computer moves, including Random and Smart strategies.
+ *  - GameManager: Manages the game's main operations and serves as the Singleton controller for game state and logic.
+ * 
+ * Arduino Setup:
+ *  - setup(): Initializes serial communication and sets up random seed generation.
+ *  - loop(): Handles serial input and commands (move processing, mode setting, save/load operations).
+ */
 #include <ArduinoJson.h>
 
-// Паттерн State для збереження стану гри
+/**
+ * @class GameState
+ * @brief Manages the game state, including scores, game mode, and recent moves.
+ */
 class GameState {
   public:
     int player1Score = 0;
@@ -11,21 +32,45 @@ class GameState {
     String lastComputerMove = "";
 };
 
-// Паттерн Strategy для різних режимів гри
+/**
+ * @class GameStrategy
+ * @brief Defines a strategy interface for generating moves in different game modes.
+ */
 class GameStrategy {
   public:
+    /**
+     * Generates a move for the game.
+     * @return A string representing the move ("rock", "paper", or "scissors").
+     */
     virtual String makeMove() = 0;
+
+    /**
+     * Updates the strategy with the opponent's last move.
+     * @param opponentMove The last move made by the opponent.
+     */
     virtual void updateLastMove(String opponentMove) {}
 };
 
+/**
+ * @class RandomStrategy
+ * @brief Generates random moves for the computer.
+ */
 class RandomStrategy : public GameStrategy {
   public:
+    /**
+     * Generates a random move.
+     * @return A randomly chosen move ("rock", "paper", or "scissors").
+     */
     String makeMove() {
       String moves[] = {"rock", "paper", "scissors"};
       return moves[random(0, 3)];
     }
 };
 
+/**
+ * @class SmartStrategy
+ * @brief Adapts to the opponent's moves, increasing the chance of countering frequent moves.
+ */
 class SmartStrategy : public GameStrategy {
   private:
     String lastOpponentMove = "";
@@ -34,6 +79,10 @@ class SmartStrategy : public GameStrategy {
     int scissorsCount = 0;
     
   public:
+    /**
+     * Generates a move based on the opponent's previous moves.
+     * @return A move intended to counter the opponent's likely next move.
+     */
     String makeMove() {
       if (lastOpponentMove == "") {
         return RandomStrategy().makeMove();
@@ -50,6 +99,10 @@ class SmartStrategy : public GameStrategy {
       }
     }
     
+    /**
+     * Updates internal counters based on the opponent's last move.
+     * @param opponentMove The last move made by the opponent.
+     */
     void updateLastMove(String opponentMove) override {
       lastOpponentMove = opponentMove;
       if (opponentMove == "rock") rockCount++;
@@ -58,7 +111,11 @@ class SmartStrategy : public GameStrategy {
     }
 };
 
-// Паттерн Singleton для керування грою
+/**
+ * @class GameManager
+ * @brief Manages the game logic, including score updates, move processing, and game mode setting.
+ * Implements the Singleton pattern to ensure a single instance manages the game.
+ */
 class GameManager {
   private:
     static GameManager* instance;
@@ -72,6 +129,10 @@ class GameManager {
     }
     
   public:
+    /**
+     * Retrieves the Singleton instance of the GameManager.
+     * @return A pointer to the GameManager instance.
+     */
     static GameManager* getInstance() {
       if (!instance) {
         instance = new GameManager();
@@ -79,6 +140,12 @@ class GameManager {
       return instance;
     }
     
+    /**
+     * Processes a player's move, updates the game state, and generates a JSON response.
+     * @param playerMove The move made by the player ("rock", "paper", or "scissors").
+     * @param isPlayer1 Boolean indicating if the move is from player 1.
+     * @return A JSON string representing the updated game state.
+     */
     String processMove(String playerMove, bool isPlayer1) {
       StaticJsonDocument<200> doc;
       
@@ -131,6 +198,11 @@ class GameManager {
       return output;
     }
     
+    /**
+     * Sets the game mode and resets the scores.
+     * @param mode The game mode to set ("hvh", "hvc", "cvc", "cvcs").
+     * @return A JSON string representing the game state with the new mode.
+     */
     String setGameMode(String mode) {
       StaticJsonDocument<200> doc;
       state.gameMode = mode;
@@ -144,6 +216,9 @@ class GameManager {
       return output;
     }
     
+    /**
+     * Resets player scores and clears the last moves.
+     */
     void resetScores() {
       state.player1Score = 0;
       state.player2Score = 0;
@@ -152,6 +227,10 @@ class GameManager {
       state.lastComputerMove = "";
     }
     
+    /**
+     * Saves the current game state and returns a JSON string confirming the save.
+     * @return A JSON string with save confirmation and current game state details.
+     */
     String saveGame() {
       StaticJsonDocument<200> doc;
       doc["status"] = "saved";
@@ -164,6 +243,10 @@ class GameManager {
       return output;
     }
     
+    /**
+     * Loads a saved game state from a JSON string.
+     * @param savedState JSON string containing saved game state details.
+     */
     void loadGame(String savedState) {
       StaticJsonDocument<200> doc;
       deserializeJson(doc, savedState);
@@ -189,11 +272,19 @@ class GameManager {
 
 GameManager* GameManager::instance = nullptr;
 
+/**
+ * Arduino setup function.
+ * Configures the serial connection and initializes random seed.
+ */
 void setup() {
   Serial.begin(9600);
   randomSeed(analogRead(0));
 }
 
+/**
+ * Arduino main loop function.
+ * Listens for serial input and processes commands (move, mode setting, save, and load operations).
+ */
 void loop() {
   if (Serial.available() > 0) {
     String input = Serial.readStringUntil('\n');
