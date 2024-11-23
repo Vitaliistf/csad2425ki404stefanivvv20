@@ -280,49 +280,49 @@ class GameManager {
 
 GameManager* GameManager::instance = nullptr;
 
-// SETUP AND LOOP ARE COMMENTED OUT ONLY FOR TESTING PURPOSES
+// NOTE: SETUP AND LOOP SHOULD BE COMMENTED OUT WHEN TESTING
 
-// /**
-//  * Arduino setup function.
-//  * Configures the serial connection and initializes random seed.
-//  */
-// void setup() {
-//   Serial.begin(9600);
-//   randomSeed(analogRead(0));
-// }
+/**
+ * Arduino setup function.
+ * Configures the serial connection and initializes random seed.
+ */
+void setup() {
+  Serial.begin(9600);
+  randomSeed(analogRead(0));
+}
 
-// /**
-//  * Arduino main loop function.
-//  * Listens for serial input and processes commands (move, mode setting, save, and load operations).
-//  */
-// void loop() {
-//   if (Serial.available() > 0) {
-//     String input = Serial.readStringUntil('\n');
-//     StaticJsonDocument<200> doc;
-//     deserializeJson(doc, input);
+/**
+ * Arduino main loop function.
+ * Listens for serial input and processes commands (move, mode setting, save, and load operations).
+ */
+void loop() {
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    StaticJsonDocument<200> doc;
+    deserializeJson(doc, input);
     
-//     String command = doc["command"];
-//     GameManager* game = GameManager::getInstance();
+    String command = doc["command"];
+    GameManager* game = GameManager::getInstance();
     
-//     if (command == "move") {
-//       String move = doc["move"];
-//       bool isPlayer1 = doc["isPlayer1"];
-//       String response = game->processMove(move, isPlayer1);
-//       Serial.println(response);
-//     }
-//     else if (command == "setMode") {
-//       String mode = doc["mode"];
-//       String response = game->setGameMode(mode);
-//       Serial.println(response);
-//     }
-//     else if (command == "save") {
-//       String savedState = game->saveGame();
-//       Serial.println(savedState);
-//     }
-//     else if (command == "load") {
-//       String savedState = doc["state"];
-//       game->loadGame(savedState);
-//       Serial.println("{\"status\":\"loaded\"}");
-//     }
-//   }
-// }
+    if (command == "move") {
+      String move = doc["move"];
+      bool isPlayer1 = doc["isPlayer1"];
+      String response = game->processMove(move, isPlayer1);
+      Serial.println(response);
+    }
+    else if (command == "setMode") {
+      String mode = doc["mode"];
+      String response = game->setGameMode(mode);
+      Serial.println(response);
+    }
+    else if (command == "save") {
+      String savedState = game->saveGame();
+      Serial.println(savedState);
+    }
+    else if (command == "load") {
+      String savedState = doc["state"];
+      game->loadGame(savedState);
+      Serial.println("{\"status\":\"loaded\"}");
+    }
+  }
+}
