@@ -255,6 +255,14 @@ class GameManager {
       state.player2Score = doc["player2Score"];
       state.gameMode = doc["gameMode"].as<String>();
     }
+
+    /**
+     * Retrieves current game state (for testing purposes only).
+     * @return game state.
+     */
+    GameState getGameState() {
+      return state;
+    }
     
   private:
     void updateScore(String move1, String move2) {
@@ -271,6 +279,8 @@ class GameManager {
 };
 
 GameManager* GameManager::instance = nullptr;
+
+// NOTE: SETUP AND LOOP SHOULD BE COMMENTED OUT WHEN TESTING
 
 /**
  * Arduino setup function.
